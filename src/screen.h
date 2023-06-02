@@ -13,3 +13,6 @@ typedef struct {
 
 static const struct swc_screen_handler screenHandler = {0};
 
+void screenAddWin(Screen* screen, void* win);
+void screenRemoveWin(Screen* screen, void* win);
+

@@ -8,5 +8,5 @@ make
 ```
 On Nvidia:
 ```sh
-make -E "NVIDIA=-D NVIDIA"
+make nvidia
 ```

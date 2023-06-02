@@ -1,6 +1,8 @@
 #include <swc.h>
 #include <wayland-server.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "util.h"
 #include "window.h"
@@ -9,7 +11,15 @@
 Screen* currentScreen;
 Window* focusedWindow;
 
+
 static void newWindow(struct swc_window* swc) {
+	Window* win;
+	win = malloc(sizeof(*win));
+	if (!win)
+		return;
+	win->swc = swc;
+	win->screen = NULL;
+
 }
 
 static void newScreen(struct swc_screen* swc) {
@@ -22,6 +32,7 @@ static void newScreen(struct swc_screen* swc) {
 	wl_list_init(&screen->windows);
 	swc_screen_set_handler(swc, &screenHandler, screen);
 	currentScreen = screen;
+	execvp("alacritty", NULL);
 }
 
 static const struct swc_manager manager = {
@@ -35,13 +46,17 @@ u8 main(int argc, char** argv) {
 	setenv("GBM_BACKEND", "nvidia-drm", 1);
 	setenv("__GLX_VENDOR_LIBRARY_NAME", "nvidia", 1);
 	setenv("WLR_NO_HARDWARE_CURSORS", "1", 1);
-	printf("NVIDIA\n");
 	#endif
 	// Other wayland stuff
 	setenv("MOZ_ENABLE_WAYLAND", "1", 1);
 	setenv("XDG_SESSION_TYPE", "wayland", 1);
 
+	const char *socket;
+
 	struct wl_display* disp = wl_display_create();
+	socket = wl_display_add_socket_auto(disp);
+	setenv("WAYLAND_DISPLAY", socket, 1);
+
 	swc_initialize(disp, NULL, &manager);
 	wl_display_run(disp);
 
