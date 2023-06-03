@@ -18,7 +18,11 @@ static void newWindow(struct swc_window* swc) {
 	if (!win)
 		return;
 	win->swc = swc;
-	win->screen = NULL;
+	win->screen = currentScreen;
+	screenAddWin(currentScreen, win);
+	swc_window_focus(swc);
+	struct swc_rectangle r = {.x=0, .y=0, .width=1024, .height=600};
+	swc_window_set_geometry(swc, &r);
 
 }
 

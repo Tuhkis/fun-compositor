@@ -1,7 +1,7 @@
 CC:=gcc
 CFLAGS:=-O3 -pipe
 LIBS:=-lm -lwayland-server -lswc
-OUT:=func-wm
+OUT:=fun-compositor
 
 COMP:=$(CC) $(CFLAGS) -c
 LINK:=$(CC) *.o $(LIBS) -o $(OUT)
